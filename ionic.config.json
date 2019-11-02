@@ -1,5 +1,7 @@
 {
   "name": "rozMarzaEntry",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

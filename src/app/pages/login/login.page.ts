@@ -19,6 +19,9 @@ password: string;
     try {
    const res = await this.afAuth.auth.signInWithEmailAndPassword(this.userName + '@gmail.com', this.password);
    console.log('printing successfull login res ', res);
+   if(res && res.user.uid) {
+     
+   }
     } catch (error) {
       console.dir(error);
     }

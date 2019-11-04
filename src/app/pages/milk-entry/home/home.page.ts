@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
 import { firestore } from 'firebase';
 import { EditEntryComponent } from 'src/app/shared/components/edit-entry/edit-entry.component';
+import { MilkEntryDetailService } from 'src/app/services/milk-entry-detail/milk-entry-detail.service';
 
 @Component({
   selector: 'app-home',
@@ -17,10 +18,13 @@ export class HomePage implements OnInit {
     private navCtrl: NavController,
     private agFirestore: AngularFirestore,
     private userService: UserDetailsService,
+    private milkEntryService: MilkEntryDetailService,
     private popoverController: PopoverController
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.milkRate = this.milkEntryService.getMilkRate();
+  }
   showDetails() {
     this.navCtrl.navigateForward(['/milk-detail']);
   }
@@ -51,6 +55,7 @@ export class HomePage implements OnInit {
       if (dataReturned !== null) {
         console.log('Printing date returned ', dataReturned);
         this.milkRate = dataReturned.data;
+        this.milkEntryService.setMilkRate(this.milkRate);
       }
     });
 

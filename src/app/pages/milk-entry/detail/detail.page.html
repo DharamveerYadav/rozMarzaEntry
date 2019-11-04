@@ -1,9 +1,48 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>detail</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="milk-home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Milk details Month Wise</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Select Month/ Year </ion-label>
+      <ion-datetime
+        [(ngModel)]="selectedDate"
+        displayFormat="MMM YYYY"
+        pickerFormat="MMMM YYYY"
+        (ionChange)="doSomething(this.selectedDate)"
+      ></ion-datetime>
+    </ion-item>
+  </ion-list>
 
+  <ion-list>
+    <ion-item>
+      <ion-label>Milk Details (Tap to edit or add)</ion-label>
+    </ion-item>
+    <ion-item class="details-list-header">
+      <ion-label>Day</ion-label>
+      <ion-label slot="end">Quantity</ion-label>
+    </ion-item>
+    <ion-item *ngFor="let data of milkData">
+      <ion-label>{{ data?.day }}</ion-label>
+      <ion-label slot="end">{{ data?.quantity }}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+<ion-footer color="primary">
+  <ion-list>
+    <ion-item>
+      <ion-label>Total Quantity</ion-label>
+      <ion-label slot="end">{{ totalQuantity }}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Money </ion-label>
+      <ion-label slot="end">{{ totalMoney }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-footer>

@@ -1,0 +1,14 @@
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label position="stacked">Current value</ion-label>
+      <ion-input [value]="oldValue"> </ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="stacked">New value</ion-label>
+      <ion-input [(ngModel)]="newValue" placeholder="Enter Input"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button shape="round" (click)="dismissPopOver()"> Save</ion-button>
+  <ion-button shape="round" (click)="cancelPopOver()"> Cancel</ion-button>
+</ion-content>

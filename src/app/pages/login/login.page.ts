@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
+import { NavController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
+import { UserDetailsService } from 'src/app/services/user-details/user-details.service';
 
 @Component({
   selector: 'app-login',
@@ -10,7 +13,8 @@ import { auth } from 'firebase/app';
 export class LoginPage implements OnInit {
 userName: string;
 password: string;
-  constructor(public afAuth: AngularFireAuth) { }
+  constructor(public afAuth: AngularFireAuth, private navCtrl: NavController, private storage: Storage,
+    private userService: UserDetailsService) { }
 
   ngOnInit() {
   }
@@ -19,8 +23,10 @@ password: string;
     try {
    const res = await this.afAuth.auth.signInWithEmailAndPassword(this.userName + '@gmail.com', this.password);
    console.log('printing successfull login res ', res);
-   if(res && res.user.uid) {
-     
+   if (res && res.user.uid) {
+     this.storage.set('userId', res.user.uid);
+     this.userService.setUId(res.user.uid);
+     this.navCtrl.navigateForward(['/milk-home']);
    }
     } catch (error) {
       console.dir(error);

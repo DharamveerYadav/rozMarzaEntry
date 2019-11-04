@@ -5,10 +5,16 @@
 </ion-header>
 
 <ion-content>
-  <ion-item>
-    <ion-label>Rate</ion-label>
-    <ion-input slot="end" [(ngModel)] = "milkRate" type="number"></ion-input>
-  </ion-item>
-  <ion-button shape="round">1 litr</ion-button>
-  <ion-button shape="round">1.5 litr</ion-button>
+  <ion-list>
+    <ion-item (click)="editEntryPopover($event)" tappable>
+      <ion-label>Rate</ion-label>
+      <ion-input slot="end" [(ngModel)]="milkRate" type="number"></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button shape="round" (click)="addDetails(0.5)">0.5 litr</ion-button>
+  <ion-button shape="round" (click)="addDetails(1)">1 litr</ion-button>
+  <ion-button shape="round" (click)="addDetails(1.5)">1.5 litr</ion-button>
 </ion-content>
+<ion-footer>
+  <ion-button expand="full" color="primary" (click)="showDetails()"> Show details </ion-button>
+</ion-footer>

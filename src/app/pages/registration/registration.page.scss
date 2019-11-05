@@ -1,0 +1,17 @@
+ion-toolbar {
+  --background: var(--ion-color-secondary-shade);
+}
+
+ion-content {
+  --background: #eeefe9;
+  .registration-container {
+    display: block;
+    margin: 20% auto;
+    width: 80%;
+    box-shadow: 13px 13px 7px 1px rgba(0, 0, 0, 0.1);
+
+    .signUp-button {
+      margin-top: 15px;
+    }
+  }
+}

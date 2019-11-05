@@ -1,18 +1,18 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content fullscreen>
+  <div class="login-container">
+    <ion-item>
+      <ion-label position="floating">User Name</ion-label>
+      <ion-input [(ngModel)]="userName" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input [(ngModel)]="password" type="password"></ion-input>
+    </ion-item>
+    <ion-button fill="solid" expend="block" color="dark" (click)="login()">Login</ion-button>
 
-<ion-content>
-  <ion-item>
-    <ion-label position="floating">User Name</ion-label>
-    <ion-input [(ngModel)]="userName" type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Password</ion-label>
-    <ion-input [(ngModel)]="password" type="password"></ion-input>
-  </ion-item>
-  <ion-button fill="solid" expend="block" color="dark" (click)="login()">Login</ion-button>
-  <a  routerLink="/registration" routerDirection="forward"> Sign Up</a>
+    <div class="signUp-container">
+      <h4>Not Registred Yet ?</h4>
+      <a routerLink="/registration" routerDirection="forward" class="singUp-link"> Sign Up</a>
+    </div>
+  </div>
 </ion-content>

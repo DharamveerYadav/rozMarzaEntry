@@ -52,7 +52,7 @@ export class MilkEntryService {
               // return;
             }
           });
-          resolve(temp2);
+          resolve(_.sortBy(temp2, ['day']));
         });
     });
   }
@@ -162,7 +162,7 @@ export class MilkEntryService {
               // return;
             }
           });
-          resolve(temp2);
+          resolve(_.sortBy(temp2, ['day']));
         });
     });
   }

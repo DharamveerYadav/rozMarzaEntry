@@ -9,6 +9,11 @@
       <ion-input type="number" [(ngModel)]="newValue" placeholder="Enter Input"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button shape="round" (click)="dismissPopOver()"> Save</ion-button>
-  <ion-button shape="round" (click)="cancelPopOver()"> Cancel</ion-button>
+  <ion-button shape="round" (click)="dismissPopOver()">
+    <ion-icon name="save"></ion-icon>
+  </ion-button>
+  <ion-button *ngIf="isDeletableEntry" color="danger" shape="round" (click)="deletePopOver()">
+    <ion-icon name="trash"></ion-icon>
+  </ion-button>
+  <ion-button shape="round" (click)="cancelPopOver()" color="secondary"> X</ion-button>
 </ion-content>

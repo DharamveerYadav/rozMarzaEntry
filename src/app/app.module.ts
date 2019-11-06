@@ -11,14 +11,18 @@ import { environment } from 'src/environments/environment';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { IonicStorageModule } from '@ionic/storage';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { EditEntryComponent } from './shared/components/edit-entry/edit-entry.component';
+import { NewEntryComponent } from './shared/components/new-entry/new-entry.component';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
-  declarations: [AppComponent],
-  entryComponents: [],
+  declarations: [AppComponent, NewEntryComponent],
+  entryComponents: [NewEntryComponent],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
+    FormsModule,
+    CommonModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,

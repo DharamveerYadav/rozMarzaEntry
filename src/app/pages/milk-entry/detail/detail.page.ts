@@ -7,6 +7,7 @@ import { EditEntryComponent } from 'src/app/shared/components/edit-entry/edit-en
 import { IMilkEntry } from 'src/app/shared/shared.interface';
 import { MilkEntryDetailService } from 'src/app/services/milk-entry-detail/milk-entry-detail.service';
 import { MilkEntryService } from 'src/app/services/milk-entry/milk-entry.service';
+import { SharedUtilService } from 'src/app/services/shared-util/shared-util.service';
 
 @Component({
   selector: 'app-detail',
@@ -24,9 +25,12 @@ export class DetailPage implements OnInit {
     private userService: UserDetailsService,
     private popoverController: PopoverController,
     private milkEntryService: MilkEntryService,
-    private milkEntryDetailService: MilkEntryDetailService
+    private milkEntryDetailService: MilkEntryDetailService,
+    private sharedUtilService: SharedUtilService
   ) {
+    this.sharedUtilService.setDayMonthYear(this.selectedDate);
     this.milkEntryDetailService.getMilkDetailList().subscribe(entries => {
+      console.log('entries in subscribe method ', entries);
       this.milkData = entries;
       this.totalMoney = 0;
       this.totalQuantity = 0;
@@ -40,32 +44,18 @@ export class DetailPage implements OnInit {
     console.log('printing date ', this.selectedDate);
     this.totalQuantity = 0;
     this.totalMoney = 0;
-    const values = [
-      { quantity: 5, day: 2, rate: 60, money: 300 },
-      { quantity: 2, day: 3, rate: 60, money: 120 },
-      { quantity: 1, day: 4, rate: 60, money: 60 },
-      { quantity: 5, day: 2, rate: 60, money: 300 },
-      { quantity: 2, day: 3, rate: 60, money: 120 },
-      { quantity: 1, day: 4, rate: 60, money: 60 },
-      { quantity: 5, day: 2, rate: 60, money: 300 },
-      { quantity: 2, day: 3, rate: 60, money: 120 },
-      { quantity: 1, day: 4, rate: 60, money: 60 },
-      { quantity: 5, day: 2, rate: 60, money: 300 },
-      { quantity: 2, day: 3, rate: 60, money: 120 },
-      { quantity: 1, day: 4, rate: 60, money: 60 },
-      { quantity: 5, day: 2, rate: 60, money: 300 },
-      { quantity: 2, day: 3, rate: 60, money: 120 },
-      { quantity: 1, day: 4, rate: 60, money: 60 }
-    ];
-    // this.milkData = values;
   }
 
-  async doSomething(date: string) {
-    console.log('Printing selected date ', date);
+  async monthYearChanged(date: string) {
+    this.sharedUtilService.setDayMonthYear(date);
     this.refreshContent();
   }
   ionViewWillEnter() {
     this.refreshContent();
+  }
+
+  addNewEntry() {
+    this.sharedUtilService.addMilkEntry();
   }
 
   async refreshContent() {
@@ -75,17 +65,21 @@ export class DetailPage implements OnInit {
     });
   }
 
-  async editEntryPopover(entry: IMilkEntry) {
+  async editEntryPopover(entry: IMilkEntry, deletable?: boolean) {
     console.log('printing event  ', event);
     const popover = await this.popoverController.create({
       component: EditEntryComponent,
-      componentProps: { passValue: entry.quantity }
+      componentProps: { passValue: entry.quantity, deletable: true }
     });
     popover.onDidDismiss().then(dataReturned => {
-      if (dataReturned !== null) {
+      if (dataReturned && dataReturned.data) {
         console.log('Printing date returned ', dataReturned);
         // this.milkRate = dataReturned.data;
-        this.milkEntryService.updateMilkEntry(entry.day, entry.month, entry.year, dataReturned.data, entry.quantity);
+        if (dataReturned.data == 'delete') {
+          this.milkEntryService.deleteMilkEntry(entry.day, entry.month, entry.year, entry.quantity);
+        } else {
+          this.milkEntryService.updateMilkEntry(entry.day, entry.month, entry.year, dataReturned.data, entry.quantity);
+        }
       }
     });
 

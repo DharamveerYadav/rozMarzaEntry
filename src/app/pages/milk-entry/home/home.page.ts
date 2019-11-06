@@ -5,6 +5,8 @@ import { UserDetailsService } from 'src/app/services/user-details/user-details.s
 import { firestore } from 'firebase';
 import { EditEntryComponent } from 'src/app/shared/components/edit-entry/edit-entry.component';
 import { MilkEntryDetailService } from 'src/app/services/milk-entry-detail/milk-entry-detail.service';
+import { MilkEntryService } from 'src/app/services/milk-entry/milk-entry.service';
+import { SharedUtilService } from 'src/app/services/shared-util/shared-util.service';
 
 @Component({
   selector: 'app-home',
@@ -12,37 +14,34 @@ import { MilkEntryDetailService } from 'src/app/services/milk-entry-detail/milk-
   styleUrls: ['./home.page.scss']
 })
 export class HomePage implements OnInit {
-  milkRate: number = 60;
+  milkRate: number;
   uid: string;
   constructor(
     private navCtrl: NavController,
     private agFirestore: AngularFirestore,
     private userService: UserDetailsService,
-    private milkEntryService: MilkEntryDetailService,
-    private popoverController: PopoverController
+    private milkEntryDetailsService: MilkEntryDetailService,
+    private popoverController: PopoverController,
+    private milkEntryService: MilkEntryService,
+    private sharedUtilService: SharedUtilService
   ) {}
 
-  ngOnInit() {
-    this.milkRate = this.milkEntryService.getMilkRate();
+  async ngOnInit() {
+    this.sharedUtilService.setDayMonthYear(new Date().toISOString());
+    this.milkRate = await this.milkEntryService.fetchCurrentMilkRate();
+    if (this.milkRate) {
+      this.milkEntryDetailsService.setMilkRate(this.milkRate);
+    } else {
+      this.milkRate = 60;
+      this.milkEntryService.updateCurrentMilkRate(60);
+    }
   }
   showDetails() {
     this.navCtrl.navigateForward(['/milk-detail']);
   }
 
   addDetails(milkQuantity: number) {
-    const date = new Date();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    this.agFirestore.doc(`users/${this.userService.getUId()}`).update({
-      [`${month},${year}`]: firestore.FieldValue.arrayUnion({
-        day: date.getDate(),
-        month: date.getMonth() + 1,
-        year: date.getFullYear(),
-        quantity: milkQuantity,
-        rate: this.milkRate,
-        money: milkQuantity * this.milkRate
-      })
-    });
+    this.milkEntryService.addMilkEntry(milkQuantity);
   }
 
   async editEntryPopover(event) {
@@ -55,7 +54,8 @@ export class HomePage implements OnInit {
       if (dataReturned !== null) {
         console.log('Printing date returned ', dataReturned);
         this.milkRate = dataReturned.data;
-        this.milkEntryService.setMilkRate(this.milkRate);
+        this.milkEntryDetailsService.setMilkRate(this.milkRate);
+        this.milkEntryService.updateCurrentMilkRate(this.milkRate);
       }
     });
 

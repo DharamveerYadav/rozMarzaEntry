@@ -97,6 +97,7 @@ export class MilkEntryService {
 
   async updateCurrentMilkRate(milkRate: number) {
     console.log('insider  milkRate ', milkRate);
+
     await this.agFirestore.doc(`users/${this.userService.getUId()}`).update({
       'milk-rate': milkRate
     });
@@ -104,6 +105,7 @@ export class MilkEntryService {
   }
 
   addMilkEntry(milkQuantity: number, dayValue?: number) {
+    this.injector.get(SharedUtilService).presentLoading();
     let day = this.milkEntryDetailService.getDay();
     if (dayValue) {
       day = dayValue;
@@ -123,6 +125,7 @@ export class MilkEntryService {
         })
       })
       .then(() => {
+        this.injector.get(SharedUtilService).hideLoading();
         this.injector.get(SharedUtilService).createAlert('Entry Added Successfully !!!');
         this.fetchDetails(this.milkEntryDetailService.getCurrentDate()).then(entries => {
           console.log('entries after new new one ', entries);

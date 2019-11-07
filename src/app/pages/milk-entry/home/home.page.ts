@@ -27,6 +27,7 @@ export class HomePage implements OnInit {
   ) {}
 
   async ngOnInit() {
+    await this.sharedUtilService.presentLoading();
     this.sharedUtilService.setDayMonthYear(new Date().toISOString());
     this.milkRate = await this.milkEntryService.fetchCurrentMilkRate();
     if (this.milkRate) {
@@ -35,6 +36,7 @@ export class HomePage implements OnInit {
       this.milkRate = 60;
       this.milkEntryService.updateCurrentMilkRate(60);
     }
+    this.sharedUtilService.hideLoading();
   }
   showDetails() {
     this.navCtrl.navigateForward(['/milk-detail']);
@@ -53,12 +55,18 @@ export class HomePage implements OnInit {
     popover.onDidDismiss().then(dataReturned => {
       if (dataReturned !== null) {
         console.log('Printing date returned ', dataReturned);
+        this.sharedUtilService.presentLoading();
         this.milkRate = dataReturned.data;
         this.milkEntryDetailsService.setMilkRate(this.milkRate);
         this.milkEntryService.updateCurrentMilkRate(this.milkRate);
+        this.sharedUtilService.hideLoading();
       }
     });
 
     return await popover.present();
+  }
+
+  logout() {
+    this.navCtrl.navigateRoot(['/login']);
   }
 }

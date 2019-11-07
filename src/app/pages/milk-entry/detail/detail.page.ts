@@ -38,6 +38,7 @@ export class DetailPage implements OnInit {
         this.totalMoney += entries.money;
         this.totalQuantity += entries.quantity;
       });
+      this.sharedUtilService.hideLoading();
     });
   }
   ngOnInit() {
@@ -59,9 +60,9 @@ export class DetailPage implements OnInit {
   }
 
   async refreshContent() {
+    this.sharedUtilService.presentLoading();
     this.milkEntryService.fetchDetails(this.selectedDate).then(entries => {
       this.milkEntryDetailService.setMilkDetailList(entries);
-      // this.milkData = entries
     });
   }
 
@@ -73,6 +74,7 @@ export class DetailPage implements OnInit {
     });
     popover.onDidDismiss().then(dataReturned => {
       if (dataReturned && dataReturned.data) {
+        this.sharedUtilService.presentLoading();
         console.log('Printing date returned ', dataReturned);
         // this.milkRate = dataReturned.data;
         if (dataReturned.data == 'delete') {

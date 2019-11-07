@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { AlertController, PopoverController } from '@ionic/angular';
+import { AlertController, PopoverController, LoadingController } from '@ionic/angular';
 import { MilkEntryDetailService } from '../milk-entry-detail/milk-entry-detail.service';
 import { NewEntryComponent } from 'src/app/shared/components/new-entry/new-entry.component';
 import { MilkEntryService } from '../milk-entry/milk-entry.service';
@@ -12,7 +12,8 @@ export class SharedUtilService {
     private alertCtrl: AlertController,
     private milkEntryDetailService: MilkEntryDetailService,
     private popoverController: PopoverController,
-    private injector: Injector
+    private injector: Injector,
+    private loadingCtrl: LoadingController
   ) {}
 
   async createAlert(msg: string) {
@@ -23,6 +24,22 @@ export class SharedUtilService {
     await alert.present();
   }
 
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Loading...',
+      duration: 3000
+    });
+    await loading.present();
+  }
+
+  async hideLoading() {
+    try {
+      this.loadingCtrl.dismiss();
+    } catch (error) {
+      console.log('not laoding ctrl found');
+    }
+  }
+
   async addMilkEntry() {
     const popover = await this.popoverController.create({
       component: NewEntryComponent,
@@ -31,6 +48,7 @@ export class SharedUtilService {
     popover.onDidDismiss().then(dataReturned => {
       if (dataReturned !== null) {
         console.log('Printing date returned ', dataReturned);
+        this.presentLoading();
         // this.milkRate = dataReturned.data;
         this.injector.get(MilkEntryService).addMilkEntry(dataReturned.data.quantity, dataReturned.data.day);
       }

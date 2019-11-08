@@ -9,20 +9,60 @@
 
 <ion-content>
   <div class="registration-container">
-    <ion-list>
-      <ion-item>
-        <ion-label position="floating">User Name</ion-label>
-        <ion-input [(ngModel)]="userName" type="text"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Password</ion-label>
-        <ion-input [(ngModel)]="password" type="password"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label position="floating">Confirm Password</ion-label>
-        <ion-input [(ngModel)]="cpassword" type="password"></ion-input>
-      </ion-item>
-    </ion-list>
-    <ion-button fill="solid" expend="block" color="dark" (click)="signUp()" class="signUp-button"> Sign Up</ion-button>
+    <form name="form" (ngSubmit)="f.form.valid && signUp()" #f="ngForm">
+      <ion-list>
+        <ion-item>
+          <ion-label position="floating">User Name</ion-label>
+          <ion-input [(ngModel)]="userName" name="userName" #userNameV="ngModel" type="text" required></ion-input>
+        </ion-item>
+        <div
+          *ngIf="userNameV.invalid && (userNameV.dirty || userNameV.touched) && userNameV.errors.required"
+          class="errorClassMsg"
+        >
+          User Name is required.
+        </div>
+        <ion-item>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input [(ngModel)]="password" #passwordV="ngModel" name="password" type="password" required></ion-input>
+        </ion-item>
+        <div
+          *ngIf="passwordV.invalid && (passwordV.dirty || passwordV.touched) && passwordV.errors.required"
+          class="errorClassMsg"
+        >
+          Password is required.
+        </div>
+        <ion-item>
+          <ion-label position="floating">Confirm Password</ion-label>
+          <ion-input
+            [(ngModel)]="cpassword"
+            #cpasswordV="ngModel"
+            name="cpassword"
+            type="password"
+            required
+          ></ion-input>
+        </ion-item>
+        <div
+          *ngIf="cpasswordV.invalid && (cpasswordV.dirty || cpasswordV.touched) && cpasswordV.errors.required"
+          class="errorClassMsg"
+        >
+          Confirm password is required.
+        </div>
+      </ion-list>
+
+      <ion-button
+        [disabled]="!f.form.valid"
+        fill="solid"
+        expend="block"
+        type="submit"
+        color="dark"
+        class="signUp-button"
+      >
+        Sign Up</ion-button
+      >
+      <ul>
+        <li><small> Username allows only alphbats and numbers</small></li>
+        <li><small> Password should be more than 5 characters.</small></li>
+      </ul>
+    </form>
   </div>
 </ion-content>

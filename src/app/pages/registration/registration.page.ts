@@ -22,6 +22,10 @@ export class RegistrationPage implements OnInit {
   ngOnInit() {}
 
   async signUp() {
+    if (this.password != this.cpassword) {
+      this.sharedUtil.createAlert('Password and confirm passsword does not match !!!');
+      return;
+    }
     const { userName } = this;
     try {
       const res = await this.afAuth.auth.createUserWithEmailAndPassword(this.userName + '@gmail.com', this.password);
@@ -33,6 +37,13 @@ export class RegistrationPage implements OnInit {
         this.sharedUtil.createAlert('User Registered Successfully !!!');
       }
     } catch (error) {
+      if (error.code == 'auth/weak-password') {
+        this.sharedUtil.createAlert('Password is weak !!!');
+      } else if (error.code == 'auth/invalid-email') {
+        this.sharedUtil.createAlert('Enter valid user name !!!');
+      } else {
+        this.sharedUtil.createAlert('Server error occurred, try again later !!!');
+      }
       console.dir(error);
     }
   }
